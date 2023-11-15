@@ -1,34 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Centered Image</title>
-    <style>
-        /* Set the body background to black */
-        body {
-            margin: 0;
-            height: 100vh;
-            background-color: #050005;
-            display: flex;
-            align-items: center; /* Center content vertically */
-            justify-content: center; /* Center content horizontally */
-        }
-
-        img {
-            /* Adjust the width as necessary. This will set it to 50% of the screen width. */
-            width: 15%;
-            max-width: 100%; /* Make sure the image doesn't overflow the screen width */
-            height: auto; /* Maintain aspect ratio */
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Image Layout with Scrollable Text Section and Header Background</title>
+<!-- Include Tailwind CSS -->
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
+<style>
+  .image-container {
+    height: calc(40vh - 3rem); /* Adjust height to balance with text container */
+  }
+  img {
+    object-fit: cover; /* Ensures images fill their containers */
+  }
+  .header-background {
+    background-image: url('2.png'); /* Make sure this path is correct and the image is accessible */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  .text-scroll-container {
+    height: calc(60vh - 3rem); /* Height adjusted for more text space */
+    overflow-y: auto; /* Adds scroll to the y-axis */
+    scrollbar-width: thin; /* For Firefox */
+    scrollbar-color: #888 #f1f1f1; /* For Firefox */
+  }
+  .text-content {
+    font-size: 1rem; /* Adjust text size as needed */
+  }
+  /* Custom scrollbar styles for Webkit browsers */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  .bg-slight-black {
+    background-color: #191919; /* Slightly lighter shade of black */
+  }
+</style>
 </head>
+<body class="bg-slight-black text-white overflow-hidden">
 
-<body>
-    <!-- Replace the 'path/to/your/image.jpg' with the path to your image -->
-    <img src="image.png" alt="Centered Image">
+<!-- Hidden audio element -->
+<audio id="headerAudio" src="1.mp3" preload="auto" loop></audio> <!-- Make sure the audio file is correctly referenced -->
+
+<!-- Header section with background image -->
+<div class="w-full h-16 fixed top-0 left-0 z-10 header-background text-white flex items-center justify-center"> <!-- Increased header height -->
+  <!-- Centralized Play/Pause button -->
+  <button id="audioControlButton" onclick="toggleAudio()" class="text-xl bg-gray-700 hover:bg-gray-500 text-white font-bold py-2 px-5 rounded-full focus:outline-none">
+    Play Audio
+  </button>
+</div>
+
+<!-- Main content section, using padding-top to push content below the fixed header -->
+<div class="pt-16 flex flex-col md:flex-row h-screen"> <!-- Adjusted padding-top for the larger header -->
+  <!-- Left image section -->
+  <div class="md:w-1/5 p-4 flex items-center">
+    <img src="1.png" alt="Left Image" class="rounded-lg w-full h-full">
+  </div>
+
+	<div class="md:w-3/5 p-4 flex items-center rounded-lg w-full h-full">
+  <!-- Center text section with scroll -->
+  <div class="md text-scroll-container rounded-lg w-full h-full 	scroll-snap-type:both">
+    
+As Zara Thorne steered her spaceship away from the desolate moon of Xylos, the Starblade lay gently in her grasp, humming with a soft, otherworldly energy. She glanced back at the moon, once a foreboding symbol of impending doom, now collapsing onto itself in a mesmerizing dance of destruction. The once stable surface ruptured, sending jagged rocks and lunar debris into the void, illuminated by the eerie light of dissipating arcane energies.
+<br> 
+<br>
+Through the spaceship's viewport, Zara watched in awe as Xylos's demise unfolded. Its surface, tortured by the failed ritual and unstable magic, was giving way, creating a spectacle of cosmic beauty and chaos. The cool blues and silvers of the moon's energy clashed against the dark backdrop of space, a visual testament to the power and danger that had been harnessed there. The Starblade in her hand, resonating with the moon's demise, served as a silent reminder of the thin line between salvation and destruction.
+    <div class="text-content">
+      
+    </div>
+  </div>
+</div>
+
+  <!-- Right image section -->
+  <div class="md:w-1/5 p-4 flex items-center">
+    <img src="3.png" alt="Right Image" class="rounded-lg w-full h-full">
+  </div>
+</div>
+
+<script>
+  // Function to toggle audio play/pause and handle autoplay
+  function toggleAudio() {
+    var audio = document.getElementById('headerAudio');
+    var controlButton = document.getElementById('audioControlButton');
+    
+    // Check if the audio is already playing
+    if (audio.paused) {
+      audio.play();
+      controlButton.textContent = 'Pause Audio';
+    } else {
+      audio.pause();
+      controlButton.textContent = 'Play Audio';
+    }
+  }
+  
+  // Try to play audio on page load
+  window.addEventListener('load', function() {
+    var audio = document.getElementById('headerAudio');
+    var playPromise = audio.play();
+
+    if (playPromise !== undefined) {
+      playPromise.then(_ => {
+        // Automatic playback started!
+        document.getElementById('audioControlButton').textContent = 'Pause Audio';
+      }).catch(error => {
+        // Auto-play was prevented
+        document.getElementById('audioControlButton').textContent = 'Play Audio';
+      });
+    }
+  });
+
+  // Optional: Pause audio when the window/tab is not active
+  window.onblur = function() {
+    document.getElementById('headerAudio').pause();
+    document.getElementById('audioControlButton').textContent = 'Play Audio';
+  };
+</script>
+
 </body>
-
 </html>
